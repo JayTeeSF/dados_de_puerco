@@ -1,0 +1,1 @@
+rake metrics:all
