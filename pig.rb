@@ -1,21 +1,28 @@
-# IRB.quiet; require 'pig.rb'; g = Pig.new
+# IRB.quiet; require 'pig.rb'; g = Pig.new(:player1 => "me", :player2 => "you")
 # pm g
 
+require 'array_extensions.rb'
 require 'die.rb'
-require 'player.rb'
+require 'dice_player.rb'
 
 class Pig
 
+  attr_reader :craps
   # before_filter :return_if_done, :only => [:inc, :next_turn, :roll]
   GOAL = 100
 
   def initialize(options={})
     @die = Die.new
     # p options[:player1]
-    @players = [Player.new(:name => options[:player1]), Player.new(:name => options[:player2])]
+    @players = [DicePlayer.new(:name => options[:player1]), DicePlayer.new(:name => options[:player2])]
     @turn = 0
     @done = false
+    @craps = options[:craps] || 1
     announce_turn
+  end
+
+  def craps?(value=current_player.last_roll)
+    value == craps
   end
 
   def pass
@@ -25,24 +32,33 @@ class Pig
   end
 
   def roll
-    return if @done
-    return if @crapped_out
+    value = 0
+    if @done
+      puts "Game over ...no more roll'in"
+      return value
+    end
 
-    value = @die.roll
+    if @crapped_out
+      puts "You crapped-out; 'pass' to the next player."
+      return value
+    end
+
+    value = current_player.roll(@die).sum
     print "#{current_player} rolled a #{value}"
 
-    if 1 == value
-      current_player.score = 0
+    if craps?(value)
+      current_player.send(:"score=",0)
+      @crapped_out = true
     else
-      current_player.score += value
+      current_player.send(:"score=",current_player.score + value)
     end
     puts " ...and now has a total of #{current_player.score} points"
 
-    @crapped_out = true if 0 == current_player.score
     announce_winner if current_player.score > GOAL
+    return value
   end
 
-  def check_score
+  def score
     puts "#{current_player} vs. #{next_player}: #{current_player.score}:#{next_player.score}"
   end
 
@@ -51,7 +67,7 @@ class Pig
   end
 
   def help
-    puts "do stuff like roll, pass or check_score"
+    puts "do stuff like roll, pass or score"
   end
 
   private

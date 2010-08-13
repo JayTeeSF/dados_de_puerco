@@ -1,19 +1,27 @@
+require 'class_counter.rb'
 class Player
 
-  @count = 0
-  class << self
-    attr_accessor :count
-  end
+  include ClassCounter
 
-  attr_accessor :score
+  attr_reader :score
 
   def initialize(options={})
-    self.class.count += 1
-    @name = options[:name] || "Player ##{self.class.count}"
+    @name = options[:name]
+    unless @name
+      self.class.count += 1
+      @name = "Player ##{self.class.count}"
+    end
     @score = options[:score] || 0
   end
   
   def to_s
     @name
   end
+
+  private
+
+  def score=(score)
+    @score = score
+  end
+
 end
