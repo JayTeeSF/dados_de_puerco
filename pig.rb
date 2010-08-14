@@ -1,15 +1,14 @@
-# IRB.quiet; require 'pig.rb'; g = Pig.new(:player1 => "me", :player2 => "you")
+#irb
+# IRB.quiet; require './config/app.rb'; g = Pig.new(:player1 => "me", :player2 => "you", :num_players => 3)
 # pm g
 
 #require 'array_extensions.rb' #require 'die.rb' #require 'dice_player.rb'
-Dir[File.expand_path(File.join(File.dirname(__FILE__),'lib', '*.rb'))].each {|f| require f}
-Dir[File.expand_path(File.join(File.dirname(__FILE__),'app', '*.rb'))].each {|f| require f}
 
 class Pig
 
   attr_accessor :silent
   attr_reader :craps, :players, :dice
-  # before_filter :return_if_done, :only => [:inc, :next_turn, :roll]
+
   GOAL = 100
 
   # Options: 
@@ -27,23 +26,20 @@ class Pig
     @silent = !! options[:silent]
     die_sides = options[:die_sides] || 6
     @dice = []
-    # num_dice = (options[:num_dice] && options[:num_dice] > 0) ? options[:num_dice] : 1
-    num_dice = set_option(options[:num_dice].to_i, Fixnum, 1) { |var| var > 0 }
+    num_dice = Utility.set_option(options[:num_dice].to_i, Fixnum, 1) { |var| var > 0 }
     num_dice.times { @dice << Die.new(die_sides) }
 
-    # num_players = (options[:num_players] && options[:num_players] > 0) ? options[:num_players] : 2
-    num_players = set_option(options[:num_players].to_i, Fixnum, 2) { |var| var > 0 }
+    num_players = Utility.set_option(options[:num_players].to_i, Fixnum, 2) { |var| var > 0 }
     @players = []
-#puts "options_num: #{options[:num_players]}; num_players: #{num_players}"
+
     (1..num_players).each do |idx|
       @players << DicePlayer.new(:name => options[:"player#{idx}"])
     end
-    #@players << DicePlayer.new(:name => options[:player2])
     
     @turn = 0
     @done = false
     # @craps = (options[:craps] && options[:craps] > 0) ? options[:craps] : 1
-    @craps = set_option(options[:craps].to_i, Fixnum, 1) { |var| var > 0 }
+    @craps = Utility.set_option(options[:craps].to_i, Fixnum, 1) { |var| var > 0 }
     announce_turn
   end
 
@@ -131,23 +127,23 @@ class Pig
   def announce_winner
     puts "Congratulations, #{current_player} wins" unless @silent
     @done = true
-    #{current_player}
+    current_player
   end
 
   # move this method to a module (for re-use, elsewhere)
-  def set_option(variable, type, default, &condition)
-    result = (variable && variable.respond_to?(:dup) && ! variable.kind_of?(Fixnum)) ? variable.dup : variable
-    #puts "result: #{result}"
-    result = send(variable) if variable.kind_of?(Symbol) && type != Symbol
-    #puts "result2: #{result}"
-
-    return default unless result.kind_of?(type)
-    final_condition = true
-    final_condition = yield result if block_given?
-    #puts "final_condition: #{final_condition}"
-    return default unless final_condition
-
-    result
-  end
+  #def set_option(variable, type, default, &condition)
+    #result = (variable && variable.respond_to?(:dup) && ! variable.kind_of?(Fixnum)) ? variable.dup : variable
+    ##puts "result: #{result}"
+    #result = send(variable) if variable.kind_of?(Symbol) && type != Symbol
+    ##puts "result2: #{result}"
+#
+    #return default unless result.kind_of?(type)
+    #final_condition = true
+    #final_condition = yield result if block_given?
+    ##puts "final_condition: #{final_condition}"
+    #return default unless final_condition
+#
+    #result
+  #end
 
 end

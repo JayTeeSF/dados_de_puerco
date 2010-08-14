@@ -1,18 +1,16 @@
-# require 'class_counter.rb'
-Dir[File.expand_path(File.join(File.dirname(__FILE__),'..','lib', 'class_counter.rb'))].each {|f| require f}
 class Player
 
-  include ClassCounter
+  @count = 0
+  class << self; attr_accessor :count; end
 
   attr_reader :score
 
   def initialize(options={})
-    @name = options[:name]
-    self.class.count += 1 if self.class.respond_to?(:count)
-    unless @name
-      @name = "Player ##{self.class.count}"
-    end
-    @score = options[:score] || 0
+    Player.count += 1
+    # @name = (options[:name]) ? options[:name] : 
+    #@score = options[:score] || 0
+    @name = Utility.set_option(options[:name], String, "Player ##{Player.count}") { |var| ! var.empty? }
+    @score = Utility.set_option(options[:score], Fixnum, 0) { |var| var > 0 }
   end
   
   def to_s

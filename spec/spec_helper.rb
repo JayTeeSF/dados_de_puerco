@@ -4,7 +4,7 @@ require 'spec/autorun'
 
 # require all the code:
 #Dir[File.expand_path(File.join(File.dirname(__FILE__),'..','**','*.rb'))].each {|f| require f}
-Dir[File.expand_path(File.join(File.dirname(__FILE__),'..','pig.rb'))].each {|f| require f}
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'..','config','app.rb'))].each {|f| require f}
 
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.

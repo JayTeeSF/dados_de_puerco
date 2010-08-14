@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Player do
   before(:each) do
     @params = {}
+    Player.count = 0
     @action = lambda { @p = Player.new(@params) }
   end
 
@@ -15,7 +16,7 @@ describe Player do
 
         next_player = Player.new
         next_player.to_s.should_not == @p.to_s
-        next_player.to_s.should match /Player #\d+/
+        next_player.to_s.should == 'Player #2'
       end
     end
   
@@ -33,7 +34,7 @@ describe Player do
 
         next_player = Player.new
         next_player.to_s.should_not == @p.to_s
-        next_player.to_s.should match /Player #\d+/
+        next_player.to_s.should == 'Player #2'
       end
     end
   end

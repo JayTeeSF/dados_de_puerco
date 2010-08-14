@@ -1,16 +1,8 @@
-# require 'array_extensions.rb' # require 'player.rb'
-Dir[File.expand_path(File.join(File.dirname(__FILE__), '..','lib','*.rb'))].each {|f| require f}
-Dir[File.expand_path(File.join(File.dirname(__FILE__), 'player.rb'))].each {|f| require f}
-
 class DicePlayer < Player
 
-  include ClassCounter
-
   def initialize(options={})
-    @roll_history = options[:roll_history] || []
-
-    self.class.count += 1 if self.class.respond_to?(:count)
-    options[:name] ||= "Player ##{self.class.count}"
+    # @roll_history = options[:roll_history] || []
+    @roll_history = Utility.set_option(options[:roll_history], Array, [])
 
     super(options)
   end
@@ -20,7 +12,6 @@ class DicePlayer < Player
 
     results = []
     dice.each_with_index do |die, idx|
-# puts "die.class: #{die.class}; idx.class: #{idx.class}"
       @roll_history[idx] ||= []
       results << die.roll
       @roll_history[idx] << results.last
@@ -69,7 +60,6 @@ class DicePlayer < Player
   end
 
   def get_roll(idx)
-#puts "getting roll: #{idx}"
     return [[0, 0]] if @roll_history[0].empty?
     @roll_history[0] ||= []
     die_idx = -1
