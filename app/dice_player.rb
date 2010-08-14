@@ -1,5 +1,7 @@
-require 'array_extensions.rb'
-require 'player.rb'
+# require 'array_extensions.rb'
+# require 'player.rb'
+Dir[File.expand_path(File.join(File.dirname(__FILE__), '..','lib','*.rb'))].each {|f| require f}
+Dir[File.expand_path(File.join(File.dirname(__FILE__), 'player.rb'))].each {|f| require f}
 
 class DicePlayer < Player
 
@@ -29,7 +31,7 @@ class DicePlayer < Player
   end
 
   def last_roll
-    p get_roll(last_roll_idx)
+    get_roll(last_roll_idx)
   end
 
   def score_history
@@ -44,6 +46,10 @@ class DicePlayer < Player
       die_idx += 1
       @roll_history[die_idx]
     end
+  end
+
+  def last_roll_score
+    roll_score(last_roll_idx,0)
   end
 
   def roll_score(roll_idx=last_roll_idx,score=0)

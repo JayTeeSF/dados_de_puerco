@@ -6,7 +6,7 @@ require 'active_support'
       config.metrics = [:churn, :saikuro, :flog, :flay]
       config.graphs = [:flog, :flay, :stats]
       config.saikuro  = { :output_directory => 'tmp/metric_fu/saikuro', 
-                          :input_directory => ['.'],
+                          :input_directory => ['app', 'lib'],
                           :cyclo => "",
                           :filter_cyclo => "0",
                           :warn_cyclo => "5",

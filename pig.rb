@@ -1,9 +1,11 @@
 # IRB.quiet; require 'pig.rb'; g = Pig.new(:player1 => "me", :player2 => "you")
 # pm g
 
-require 'array_extensions.rb'
-require 'die.rb'
-require 'dice_player.rb'
+#require 'array_extensions.rb'
+#require 'die.rb'
+#require 'dice_player.rb'
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'lib', '*.rb'))].each {|f| require f}
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'app', '*.rb'))].each {|f| require f}
 
 class Pig
 
@@ -21,7 +23,8 @@ class Pig
     announce_turn
   end
 
-  def craps?(value=current_player.last_roll)
+  def craps?(value=current_player.last_roll_score)
+    # puts "roll-value: #{value}"
     value == craps
   end
 

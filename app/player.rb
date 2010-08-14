@@ -1,4 +1,5 @@
-require 'class_counter.rb'
+# require 'class_counter.rb'
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'..','lib', 'class_counter.rb'))].each {|f| require f}
 class Player
 
   include ClassCounter
