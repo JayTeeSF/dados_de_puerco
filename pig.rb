@@ -28,12 +28,13 @@ class Pig
     die_sides = options[:die_sides] || 6
     @dice = []
     # num_dice = (options[:num_dice] && options[:num_dice] > 0) ? options[:num_dice] : 1
-    num_dice = set_option(options[:num_dice], Fixnum, 1) { |var| var > 0 }
+    num_dice = set_option(options[:num_dice].to_i, Fixnum, 1) { |var| var > 0 }
     num_dice.times { @dice << Die.new(die_sides) }
 
     # num_players = (options[:num_players] && options[:num_players] > 0) ? options[:num_players] : 2
-    num_players = set_option(options[:num_players], Fixnum, 2) { |var| var > 0 }
+    num_players = set_option(options[:num_players].to_i, Fixnum, 2) { |var| var > 0 }
     @players = []
+#puts "options_num: #{options[:num_players]}; num_players: #{num_players}"
     (1..num_players).each do |idx|
       @players << DicePlayer.new(:name => options[:"player#{idx}"])
     end
@@ -42,7 +43,7 @@ class Pig
     @turn = 0
     @done = false
     # @craps = (options[:craps] && options[:craps] > 0) ? options[:craps] : 1
-    @craps = set_option(options[:craps], Fixnum, 1) { |var| var > 0 }
+    @craps = set_option(options[:craps].to_i, Fixnum, 1) { |var| var > 0 }
     announce_turn
   end
 
@@ -135,13 +136,18 @@ class Pig
 
   # move this method to a module (for re-use, elsewhere)
   def set_option(variable, type, default, &condition)
-    result = variable ? variable.dup : variable
+    result = (variable && variable.respond_to?(:dup) && ! variable.kind_of?(Fixnum)) ? variable.dup : variable
+    #puts "result: #{result}"
     result = send(variable) if variable.kind_of?(Symbol) && type != Symbol
+    #puts "result2: #{result}"
 
     return default unless result.kind_of?(type)
     final_condition = true
     final_condition = yield result if block_given?
+    #puts "final_condition: #{final_condition}"
     return default unless final_condition
+
+    result
   end
 
 end
