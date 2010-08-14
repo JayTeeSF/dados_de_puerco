@@ -8,8 +8,8 @@ class Player
 
   def initialize(options={})
     @name = options[:name]
+    self.class.count += 1 if self.class.respond_to?(:count)
     unless @name
-      self.class.count += 1
       @name = "Player ##{self.class.count}"
     end
     @score = options[:score] || 0

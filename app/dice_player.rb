@@ -1,5 +1,4 @@
-# require 'array_extensions.rb'
-# require 'player.rb'
+# require 'array_extensions.rb' # require 'player.rb'
 Dir[File.expand_path(File.join(File.dirname(__FILE__), '..','lib','*.rb'))].each {|f| require f}
 Dir[File.expand_path(File.join(File.dirname(__FILE__), 'player.rb'))].each {|f| require f}
 
@@ -10,7 +9,7 @@ class DicePlayer < Player
   def initialize(options={})
     @roll_history = options[:roll_history] || []
 
-    self.class.count += 1
+    self.class.count += 1 if self.class.respond_to?(:count)
     options[:name] ||= "Player ##{self.class.count}"
 
     super(options)
