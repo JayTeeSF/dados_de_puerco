@@ -70,7 +70,7 @@ class DicePlayer < Player
   end
 
   def get_roll(idx)
-puts "getting roll: #{idx}"
+#puts "getting roll: #{idx}"
     return [[0, 0]] if @roll_history[0].empty?
     @roll_history[0] ||= []
     die_idx = -1
