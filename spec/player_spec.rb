@@ -4,19 +4,22 @@ describe Player do
   before(:each) do
     @params = {}
     Player.count = 0
-    @action = lambda { @p = Player.new(@params) }
+    @action = lambda do
+      @first_player = Player.new(@params)
+      @second_player = Player.new
+    end
   end
 
   context "When valid params" do
     context "default(s)" do
       it "should have a default name and score" do
         @action.call
-        @p.score.should be 0
-        @p.to_s.should == "Player #1"
+        @first_player.score.should == 0
+        @first_player.to_s.should == "Player #1"
 
-        next_player = Player.new
-        next_player.to_s.should_not == @p.to_s
-        next_player.to_s.should == 'Player #2'
+        @second_player.to_s.should_not == @first_player.to_s
+        @second_player.to_s.should == 'Player #2'
+        @second_player.score.should == 0
       end
     end
   
@@ -27,14 +30,14 @@ describe Player do
         @params = {:name => @name, :score => @score}
       end
 
-      it "should have a valid name and score" do
+      it "should have a valid name and score followed by defaults" do
         @action.call
-        @p.score.should == @score
-        @p.to_s.should == @name
+        @first_player.score.should == @score
+        @first_player.to_s.should == @name
 
-        next_player = Player.new
-        next_player.to_s.should_not == @p.to_s
-        next_player.to_s.should == 'Player #2'
+        @second_player.to_s.should_not == @first_player.to_s
+        @second_player.to_s.should == 'Player #2'
+        @second_player.score.should == 0
       end
     end
   end

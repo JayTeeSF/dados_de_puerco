@@ -1,7 +1,14 @@
-#irb
-# IRB.quiet; require './config/app.rb'; g = Pig.new(:player1 => "me", :player2 => "you", :num_players => 3)
+#irb # IRB.quiet; require './config/app.rb'; g = Pig.new(:player1 => "me", :player2 => "you", :num_players => 3)
 # pm g
-
+# go fast: 3.times { g.roll }; g.print_score; g.pass
+# cheat:
+# (1) increase die-sides: g.dice.first.sides=20; ...; g.dice.first.sides=6
+# (2) add extra dice: g.dice << Die.new; g.dice << Die.new
+#     puts g.dice.size => 3
+#     g.current_player.last_roll.inspect # => # [[0, 5], [1, 1], [2, 3]]
+#     puts g.current_player.score_history # => 9
+#
+#
 #require 'array_extensions.rb' #require 'die.rb' #require 'dice_player.rb'
 
 class Pig

@@ -3,10 +3,14 @@ class Die
   class SideCountException < Exception; end
 
   DEFAULT_NUM_SIDES = 6
-  attr_accessor :sides
+  attr_reader :sides
 
   def initialize(sides=DEFAULT_NUM_SIDES)
-    @sides = (sides > 0)  ?  sides : raise(SideCountException, "You can't create a die with #{sides} sides; must be > 0")
+    self.sides=(sides)
+  end
+
+  def sides=(val)
+    @sides = (val.to_i > 0)  ?  val.to_i : raise(SideCountException, "You can't create a #{val.inspect}-sided die; must be > 0")
   end
 
   def roll
